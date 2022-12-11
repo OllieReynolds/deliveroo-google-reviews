@@ -1,38 +1,80 @@
+import {
+  RATINGS_CONTAINER_SELECTOR,
+  DEFAULT_RATINGS_CONTAINER_SELECTOR,
+  DEFAULT_RATING,
+} from "./constants.js";
+
+import getContainer from './utils.js'
+
 async function getRating(name) {
-  // Use the Google Maps API to search for the restaurant and get its rating
-  var mapsUrl =
-    "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" +
-    encodeURIComponent(name) +
-    "&key=YOUR_API_KEY";
-  var response = await fetch(mapsUrl);
+  try {
+    // Send a request to the Google Places API to get the rating for the restaurant
+    var response = await fetch(
+      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${name}&inputtype=textquery&fields=rating&key=YOUR_API_KEY`
+    );
 
-  if (!response.ok) {
-    // If the response is not OK, throw an error
-    throw new Error("Failed to retrieve ratings");
-  }
+    // Parse the response as JSON
+    var data = await response.json();
 
-  var data = await response.json();
+    // Get the rating from the response, or use the default rating if the rating is not found
+    var rating = data.candidates[0].rating || DEFAULT_RATING;
 
-  // Check if there are any results for the restaurant
-  if (data.results.length > 0) {
-    // Get the first result
-    var result = data.results[0];
-    // Return the rating for the result
-    return result.rating;
+    return rating;
+  } catch (error) {
+    // If something went wrong, log the error and return the default rating
+    console.error(error);
+    return DEFAULT_RATING;
   }
 }
 
+async function getRatings(restaurants) {
+  // Initialize an empty array to store the ratings
+  var ratings = [];
+
+  try {
+    // Iterate over the list of restaurants
+    for (var restaurant of restaurants) {
+      // Get the name of the restaurant
+      var name = restaurant.querySelector(RESTAURANT_NAME_SELECTOR).innerText;
+
+      // Get the rating for the restaurant
+      var rating = await getRating(name);
+
+      // Add the rating to the array of ratings
+      ratings.push(rating);
+    }
+  } catch (error) {
+    // If something went wrong, log the error
+    console.error(error);
+  }
+
+  return ratings;
+}
+
 function insertRatings(restaurants, ratings) {
-  // Iterate over the ratings array
-  for (var i = 0; i < ratings.length; i++) {
-    var rating = ratings[i];
+  try {
+    // Iterate over the list of restaurants and their ratings
+    for (var i = 0; i < restaurants.length; i++) {
+      var restaurant = restaurants[i];
+      var rating = ratings[i];
 
-    // Create a span element
-    var ratingSpan = document.createElement("span");
-    ratingSpan.classList.add("google-rating");
-    ratingSpan.textContent = rating;
+      // Get the container element for the rating using the desired selector
+      var container = getContainer(
+        restaurant,
+        RATINGS_CONTAINER_SELECTOR,
+        DEFAULT_RATINGS_CONTAINER_SELECTOR
+      );
 
-    // Insert the span element into the page
-    restaurants[i].appendChild(ratingSpan);
+      // Create the rating element
+      var ratingElement = document.createElement("div");
+      ratingElement.classList.add("rating");
+      ratingElement.innerText = rating;
+
+      // Insert the rating element into the container
+      container.appendChild(ratingElement);
+    }
+  } catch (error) {
+    // If something went wrong, log the error
+    console.error(error);
   }
 }

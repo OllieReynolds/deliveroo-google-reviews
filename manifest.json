@@ -8,7 +8,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://deliveroo.com/*"],
+      "matches": ["*://deliveroo.co.uk/restaurants/*"],
       "js": ["src/content.js"]
     }
   ]
