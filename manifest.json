@@ -1,17 +1,15 @@
 {
-    "manifest_version": 3,
-    "name": "Google Review Extension",
-    "version": "1.0",
-    "permissions": [
-        "activeTab"
-    ],
-    "background": {
-        "service_worker": "src/background.js"
-    },
-    "content_scripts": [
-        {
-            "matches": ["*://deliveroo.com/*"],
-            "js": ["src/content.js"]
-        }
-    ]
+  "manifest_version": 3,
+  "name": "Google Review Extension",
+  "version": "1.0",
+  "permissions": ["activeTab"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://deliveroo.com/*"],
+      "js": ["src/content.js"]
+    }
+  ]
 }
