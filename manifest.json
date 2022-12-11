@@ -1,17 +1,17 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Google Review Extension",
     "version": "1.0",
     "permissions": [
         "activeTab"
     ],
     "background": {
-        "scripts": ["../js/background.js"]
+        "service_worker": "src/background.js"
     },
     "content_scripts": [
         {
-            "matches": ["*://*.deliveroo.com/*"],
-            "js": ["../js/content.js"]
+            "matches": ["*://deliveroo.com/*"],
+            "js": ["src/content.js"]
         }
     ]
 }
