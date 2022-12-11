@@ -6,12 +6,12 @@
         "activeTab"
     ],
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["../js/background.js"]
     },
     "content_scripts": [
         {
             "matches": ["*://*.deliveroo.com/*"],
-            "js": ["content.js"]
+            "js": ["../js/content.js"]
         }
     ]
 }
