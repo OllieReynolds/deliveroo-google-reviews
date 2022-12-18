@@ -1,10 +1,26 @@
-import {
-  RATINGS_CONTAINER_SELECTOR,
-  DEFAULT_RATINGS_CONTAINER_SELECTOR,
-  DEFAULT_RATING,
-} from "./constants.js";
+const RESTAURANT_NAME_SELECTOR = ".restaurant-name";
+const RESTAURANT_ITEM_SELECTOR = ".restaurant-item";
+const RATINGS_CONTAINER_SELECTOR = ".ratings-container";
+const DEFAULT_RESTAURANT_ITEM_SELECTOR = ".restaurant-item";
+const DEFAULT_RATINGS_CONTAINER_SELECTOR = ".ratings-container";
+const DEFAULT_RATING = "N/A";
 
-import getContainer from './utils.js'
+function getContainer(restaurant, selector, defaultSelector) {
+  // Get the container element for the rating using the desired selector
+  var container = restaurant.querySelector(selector);
+
+  if (!container) {
+    // If the container element was not found, try using the default selector instead
+    container = restaurant.querySelector(defaultSelector);
+
+    if (!container) {
+      // If the container element was not found using the default selector, throw an error
+      throw new Error("Unable to find the container");
+    }
+  }
+
+  return container;
+}
 
 async function getRating(name) {
   try {
@@ -78,3 +94,39 @@ function insertRatings(restaurants, ratings) {
     console.error(error);
   }
 }
+
+function getRestaurants() {
+  // Get the list of restaurants on the page using the desired selector
+  var restaurants = document.querySelectorAll(RESTAURANT_ITEM_SELECTOR);
+
+  if (!restaurants.length) {
+    // If no restaurants were found, try using the default selector instead
+    restaurants = document.querySelectorAll(DEFAULT_RESTAURANT_ITEM_SELECTOR);
+
+    if (!restaurants.length) {
+      // If no restaurants were found using the default selector, throw an error
+      throw new Error("No restaurants were found on the page");
+    }
+  }
+
+  return restaurants;
+}
+
+// Define the getAndInsertRatings function
+async function getAndInsertRatings() {
+  try {
+    // Get the list of restaurants on the page
+    var restaurants = getRestaurants();
+
+    // Get the ratings for the restaurants
+    var ratings = await getRatings(restaurants);
+
+    // Insert the ratings into the page
+    insertRatings(restaurants, ratings);
+  } catch (error) {
+    // Log the error if something went wrong
+    console.error(error);
+  }
+}
+
+chrome.tabs.query({ active: true }).then((tabs) => getAndInsertRatings());
