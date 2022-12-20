@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "Google Review Extension",
+    "version": "1.0",
+    "permissions": ["activeTab"],
+    "content_scripts": [
+        {
+            "run_at": "document_end",
+            "matches": ["*://deliveroo.co.uk/menu/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "host_permissions": ["<all_urls>", "https://*/"]
+}

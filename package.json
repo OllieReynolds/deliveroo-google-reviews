@@ -1,0 +1,33 @@
+{
+  "name": "google-review-extension",
+  "version": "1.0.0",
+  "description": "Overlays google reviews on Deliveroo",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack/webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OllieReynolds/google-review-extension.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OllieReynolds/google-review-extension/issues"
+  },
+  "homepage": "https://github.com/OllieReynolds/google-review-extension#readme",
+  "devDependencies": {
+    "@types/chrome": "0.0.204",
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^8.30.0",
+    "prettier": "^2.8.1",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
