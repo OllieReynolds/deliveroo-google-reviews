@@ -4,6 +4,7 @@
 - Uses geohash of signed in Deliveroo user and queries Maps API for the rating for the restaurant
 - Restaurant name is retrieved using CSS selectors on /menu page
 - Google reviews will display on the same line as the Deliveroo rating
+- Only active on /menu page of Deliveroo website
 
 ## Prerequisites
 
