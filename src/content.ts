@@ -1,18 +1,32 @@
+export interface Rating {
+    rating: number;
+    user_ratings_total: number;
+}
+
 window.addEventListener('load', getAndInsertRating, false);
 
-// Define the getAndInsertRatings function
 async function getAndInsertRating(): Promise<void> {
-    console.log('-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n');
-
     try {
         const restaurant: string = getRestaurant();
         const geohash: string = getGeohash();
-        const rating: Rating = await getRating(restaurant);
+        const rating: unknown = await getRating(restaurant, geohash);
+
+        injectRating(rating);
     } catch (error) {
         console.log(error);
     }
+}
 
-    console.log('-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n');
+function injectRating(rating: any): void {
+    const span = document.createElement('span');
+    span.innerHTML = ` · ${rating.data.rating} (${rating.data.user_ratings_total})`;
+    const div = document.querySelector(
+        '#__next div div div[class^="MenuHeader-"] div div div div[class^="MenuHeader-"] div:nth-child(3)'
+    );
+
+    if (!div) throw new Error('Could not find suitable place to inject div');
+
+    div.appendChild(span);
 }
 
 function getRestaurant(): string {
@@ -21,10 +35,6 @@ function getRestaurant(): string {
     );
 
     const restaurantName: string | undefined = restaurantBlockHtml?.innerText;
-
-    console.log('------------------------------');
-    console.log(restaurantName);
-    console.log('------------------------------');
 
     if (!restaurantName)
         throw new Error('Unable to retrieve restaurant name using selector');
@@ -53,25 +63,20 @@ function getGeohash(): string {
     return geohash;
 }
 
-interface Rating {
-    score: number;
-    numReviewers: number;
-}
-
-async function getRating(restaurant: string): Promise<Rating> {
-    chrome.runtime.sendMessage(
-        {
-            type: 'ACTIVITY_HISTORY_READY'
-        },
-        function (response) {
-            console.log('>>>>Response: ', JSON.stringify(response));
-        }
-    );
-
-    const rating: Rating = {
-        score: 0,
-        numReviewers: 0
-    };
-
-    return rating;
+async function getRating(restaurant: string, geohash: string) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage(
+            {
+                restaurant: restaurant,
+                geohash: geohash
+            },
+            (response) => {
+                if (response.success) {
+                    resolve(response);
+                } else {
+                    reject(response);
+                }
+            }
+        );
+    });
 }
