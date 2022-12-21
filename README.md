@@ -14,4 +14,4 @@ Overlays google reviews on Deliveroo
 3. Set your Google Places API key in .env file in root of project directory
 4. Run `npm i`
 5. Run `npm run build`
-6. Load dist folder into chrome://extensions
+6. Load `/dist` directory into `chrome://extensions` in Google Chrome
