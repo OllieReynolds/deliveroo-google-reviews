@@ -1,6 +1,9 @@
-# google-review-extension
+# deliveroo-google-reviews
 
-Overlays google reviews on Deliveroo
+Overlays google reviews on Deliveroo on any /menu page
+Uses geohash of signed in Deliveroo user and queries Maps API for the rating for the restaurant
+Restaurant name is retrieved using CSS selectors on /menu page
+Google reviews will display on the same line as the Deliveroo rating
 
 ## Prerequisites
 
